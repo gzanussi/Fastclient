@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.german.view;
+package com.fastclient.view;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -33,12 +33,11 @@ import javax.swing.text.JTextComponent;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
-import com.german.jdbc.Coneccion;
-import com.german.model.ConnectionBean;
-import com.german.model.Modelo;
-import com.german.model.PrimaryKeyElement;
-import com.german.model.SQLResult;
-import com.german.model.TreeNodeCustom;
+import com.fastclient.jdbc.Coneccion;
+import com.fastclient.model.ConnectionBean;
+import com.fastclient.model.PrimaryKeyElement;
+import com.fastclient.model.SQLResult;
+import com.fastclient.model.TreeNodeCustom;
 
 /**
  * @author German Zanussi
@@ -156,7 +155,7 @@ public class Main {
         }
         Object[][] datoColumna = { { result } };
 
-        tabla.setModel(new Modelo(datoColumna, titColumna));
+        tabla.setModel(new TableModel(datoColumna, titColumna));
     }
 
     /**
@@ -167,7 +166,7 @@ public class Main {
 
         SQLResult result = getConeccion().executeQuery(sql, Integer.valueOf(cantidadRows.getText()));
         setSizeColulmns(10);
-        tabla.setModel(new Modelo(result.getData(), result.getColumnsName()));
+        tabla.setModel(new TableModel(result.getData(), result.getColumnsName()));
 
     }
 

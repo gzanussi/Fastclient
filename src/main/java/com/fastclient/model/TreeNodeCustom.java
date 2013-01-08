@@ -1,13 +1,13 @@
 /**
  * 
  */
-package com.german.model;
+package com.fastclient.model;
 
 import java.util.List;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import com.german.jdbc.Coneccion;
+import com.fastclient.jdbc.Coneccion;
 
 /**
  * @author German Zanussi

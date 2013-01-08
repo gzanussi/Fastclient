@@ -1,4 +1,4 @@
-package com.german.model;
+package com.fastclient.model;
 
 public class DBConnectionBeanImpl implements ConnectionBean {
 

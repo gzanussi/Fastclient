@@ -1,4 +1,4 @@
-package com.german.view;
+package com.fastclient.view;
 
 import java.awt.BorderLayout;
 import java.awt.event.WindowAdapter;
@@ -10,8 +10,8 @@ import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
-import com.german.jdbc.LoadSettings;
-import com.german.model.ConnectionBean;
+import com.fastclient.jdbc.LoadSettings;
+import com.fastclient.model.ConnectionBean;
 
 public class ConnectionEditor {
 

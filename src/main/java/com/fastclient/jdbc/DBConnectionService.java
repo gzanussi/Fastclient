@@ -1,4 +1,4 @@
-package com.german.jdbc;
+package com.fastclient.jdbc;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -6,7 +6,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.Properties;
 
-import com.german.model.ConnectionBean;
+import com.fastclient.model.ConnectionBean;
 
 public final class DBConnectionService {
 	

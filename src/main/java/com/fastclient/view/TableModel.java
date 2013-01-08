@@ -1,14 +1,14 @@
-package com.german.model;
+package com.fastclient.view;
 
 import javax.swing.table.AbstractTableModel;
 
 @SuppressWarnings("serial")
-public class Modelo extends AbstractTableModel {
+public class TableModel extends AbstractTableModel {
 
 	private Object[][] datoColumna;
 	private Object[] titColumna;
 
-	public Modelo(Object[][] datoColumna, Object[] titColumna) {
+	public TableModel(Object[][] datoColumna, Object[] titColumna) {
 		this.datoColumna = datoColumna;
 		this.titColumna = titColumna;
 	}

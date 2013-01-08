@@ -1,4 +1,4 @@
-package com.german.view;
+package com.fastclient.view;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -18,9 +18,9 @@ import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import com.german.jdbc.LoadSettings;
-import com.german.model.ConnectionBean;
-import com.german.model.ConnectionBeanEmpty;
+import com.fastclient.jdbc.LoadSettings;
+import com.fastclient.model.ConnectionBean;
+import com.fastclient.model.ConnectionBeanEmpty;
 
 @SuppressWarnings("serial")
 public class DBSelector extends JPanel {

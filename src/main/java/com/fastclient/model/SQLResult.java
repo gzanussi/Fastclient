@@ -1,4 +1,4 @@
-package com.german.model;
+package com.fastclient.model;
 
 /**
  * Bean con informaci�n de la consulta.

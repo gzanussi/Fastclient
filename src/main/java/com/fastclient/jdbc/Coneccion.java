@@ -1,4 +1,4 @@
-package com.german.jdbc;
+package com.fastclient.jdbc;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -10,9 +10,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import com.german.model.ConnectionBean;
-import com.german.model.PrimaryKeyElement;
-import com.german.model.SQLResult;
+import com.fastclient.model.ConnectionBean;
+import com.fastclient.model.PrimaryKeyElement;
+import com.fastclient.model.SQLResult;
 
 public class Coneccion{
 	

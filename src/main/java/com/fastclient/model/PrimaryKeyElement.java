@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.german.model;
+package com.fastclient.model;
 
 
 /**

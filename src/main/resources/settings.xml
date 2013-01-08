@@ -1,6 +1,6 @@
 <list>
     
-	<com.german.model.ConnectionBean>
+	<com.fastclient.model.ConnectionBean>
 		<connectionName>Test</connectionName>
 		<immageName>mysql-logo.jpg</immageName>
 		<user></user>
@@ -8,6 +8,6 @@
 		<schema></schema>
 		<url>jdbc:mysql://localhost:3306/myDatabase</url>
 		<driver>com.mysql.jdbc.Driver</driver>
-	</com.german.model.ConnectionBean>
+	</com.fastclient.model.ConnectionBean>
 
 </list>
