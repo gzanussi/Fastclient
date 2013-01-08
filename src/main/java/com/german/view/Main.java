@@ -142,7 +142,7 @@ public class Main {
     }
 
     /**
-     * Ejecuta una actualizaci�n en la bd con el sql dado.
+     * Ejecuta una actualizacion en la bd con el sql dado.
      * @param sql
      */
     private void refreshModelUpdateSQL(String sql) {

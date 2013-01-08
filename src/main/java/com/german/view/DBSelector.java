@@ -5,7 +5,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Vector;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -23,45 +23,63 @@ import com.german.model.ConnectionBean;
 import com.german.model.ConnectionBeanEmpty;
 
 @SuppressWarnings("serial")
-public class DBSelector extends JPanel implements ActionListener {
+public class DBSelector extends JPanel {
 
     private static final String IMAGES_PATH = "images/";
     private JLabel picture;
     private static ConnectionBean connectionBean;
-    private JButton button;
+    private JButton connectButton;
     private JComboBox connectionList;
     protected static JFrame frame;
+    private List<ConnectionBean> connections;
 
     public DBSelector() {
 
         super(new BorderLayout());
 
-        Vector<ConnectionBean> beans = getDBConnectionBeans();
-        connectionList = new JComboBox(beans);
+        ConnectionBean[] beans = getDBConnectionBeans();
+        connectionList = new JComboBox(getDBConnectionBeans());
         connectionList.setSelectedIndex(0);
-        connectionList.addActionListener(this);
-        
+        connectionList.addActionListener(new ActionListener() {
+            
+            public void actionPerformed(ActionEvent e) {
+                JComboBox cb = (JComboBox) e.getSource();
+                ConnectionBean conn = (ConnectionBean) cb.getSelectedItem();
+                
+                if (conn.isEmpty()) {
+                    System.out.println("new connection...");
+                    new ConnectionEditor();
+                    frame.setVisible(false);
+                }else{
+                    updateLabel(conn);
+                    connectionBean = conn;
+                }
+
+            }
+        });
+
         picture = new JLabel();
         picture.setFont(picture.getFont().deriveFont(Font.ITALIC));
         picture.setHorizontalAlignment(JLabel.CENTER);
-        updateLabel(beans.get( connectionList.getSelectedIndex()));
+        updateLabel(beans[connectionList.getSelectedIndex()]);
         picture.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
 
         picture.setPreferredSize(new Dimension(177, 122 + 10));
-        
-        button = new JButton("connect");
-        button.addActionListener(new ActionListener() {
+
+        connectButton = new JButton("connect");
+        connectButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("connecting to data base: " + getDBConnectionBean().getConnectionName());
                 new Main(getDBConnectionBean());
                 frame.setVisible(false);
+
             }
         });
 
         add(connectionList, BorderLayout.PAGE_START);
         add(picture, BorderLayout.CENTER);
-        add(button, BorderLayout.PAGE_END);
+        add(connectButton, BorderLayout.PAGE_END);
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
     }
 
@@ -70,26 +88,22 @@ public class DBSelector extends JPanel implements ActionListener {
      * 
      * @return
      */
-    private Vector<ConnectionBean> getDBConnectionBeans() {
-        Vector<ConnectionBean> connections = new LoadSettings().load();
-        connections.add(new ConnectionBeanEmpty());
-        return connections;
+    private ConnectionBean[] getDBConnectionBeans() {
+        
+        if(connections==null){
+            connections = LoadSettings.getInstance().load();
+            connections.add(new ConnectionBeanEmpty());
+        }
+        
+        return connections.toArray(new ConnectionBean[0]);
     }
 
     private ConnectionBean getDBConnectionBean() {
 
         if (connectionBean == null) {
-            connectionBean = getDBConnectionBeans().get(connectionList.getSelectedIndex());
+            connectionBean = getDBConnectionBeans()[connectionList.getSelectedIndex()];
         }
         return connectionBean;
-    }
-
-    /** Listens to the combo box. */
-    public void actionPerformed(ActionEvent e) {
-        JComboBox cb = (JComboBox) e.getSource();
-        ConnectionBean conn = (ConnectionBean) cb.getSelectedItem();
-        updateLabel(conn);
-        connectionBean = conn;
     }
 
     protected void updateLabel(ConnectionBean name) {
@@ -135,13 +149,11 @@ public class DBSelector extends JPanel implements ActionListener {
         frame.pack();
         frame.setVisible(true);
     }
-    
+
     public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
 
         UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
-        
-        
-        
+
         // Schedule a job for the event-dispatching thread:
         // creating and showing this application's GUI.
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
