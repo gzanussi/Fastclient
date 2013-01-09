@@ -1,4 +1,4 @@
-package com.fastclient.jdbc;
+package com.fastclient.util;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -20,24 +20,35 @@ public class LoadSettings {
     private static final String FILE_SEPARATOR = System.getProperty("file.separator");
     private static final String APP_DIRECTORY = HOME_DIRECTORY + FILE_SEPARATOR + ".fastclient";
     private static final String SETTINGS_FILE = APP_DIRECTORY + FILE_SEPARATOR + "settings.xml";
+    private static final String IMAGE_DIRECTORY = APP_DIRECTORY + FILE_SEPARATOR + "images";
+    private static final String LIB_DIRECTORY = APP_DIRECTORY + FILE_SEPARATOR + "lib";
     private File file;
     private static LoadSettings instance;
 
     private LoadSettings() {
 
+        checkDirectories();
         file = new File(SETTINGS_FILE);
 
         if (!file.exists()) {
-
             try {
-                if (new File(APP_DIRECTORY).mkdir()) {
-                    file.createNewFile();
-                    save(new ArrayList<ConnectionBean>());
-                }
+                file.createNewFile();
+                save(new ArrayList<ConnectionBean>());
             }
             catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+
+    }
+
+    private void checkDirectories() {
+
+        File directory = new File(APP_DIRECTORY);
+        if (!directory.exists()) {
+            directory.mkdir();
+            new File(IMAGE_DIRECTORY).mkdir();
+            new File(LIB_DIRECTORY).mkdir();
         }
 
     }

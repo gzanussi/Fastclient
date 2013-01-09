@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -18,9 +19,9 @@ import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import com.fastclient.jdbc.LoadSettings;
 import com.fastclient.model.ConnectionBean;
 import com.fastclient.model.ConnectionBeanEmpty;
+import com.fastclient.util.LoadSettings;
 import com.fastclient.util.ScreenUtil;
 
 public class DBSelector {
@@ -37,6 +38,7 @@ public class DBSelector {
 
         JPanel panel = new JPanel(new BorderLayout());
         panel.setOpaque(true);
+        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         ConnectionBean[] beans = getDBConnectionBeans();
         connectionList = new JComboBox();
@@ -64,7 +66,7 @@ public class DBSelector {
         picture.setFont(picture.getFont().deriveFont(Font.ITALIC));
         picture.setHorizontalAlignment(JLabel.CENTER);
         updateLabel(beans[connectionList.getSelectedIndex()]);
-
+        picture.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
         picture.setPreferredSize(new Dimension(177, 122 + 10));
 
         final DBSelector dbSelector = this;

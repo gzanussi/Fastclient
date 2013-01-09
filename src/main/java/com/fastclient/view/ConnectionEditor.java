@@ -17,9 +17,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-import com.fastclient.jdbc.LoadSettings;
 import com.fastclient.model.ConnectionBean;
 import com.fastclient.model.DBConnectionBeanImpl;
+import com.fastclient.util.LoadSettings;
 import com.fastclient.util.ScreenUtil;
 
 public class ConnectionEditor {
