@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fastclient.model.ConnectionBean;
@@ -19,8 +20,6 @@ public class LoadSettings {
     private static final String FILE_SEPARATOR = System.getProperty("file.separator");
     private static final String APP_DIRECTORY = HOME_DIRECTORY + FILE_SEPARATOR + ".fastclient";
     private static final String SETTINGS_FILE = APP_DIRECTORY + FILE_SEPARATOR + "settings.xml";
-    
-    private List<ConnectionBean> connections = null;
     private File file;
     private static LoadSettings instance;
 
@@ -29,30 +28,15 @@ public class LoadSettings {
         file = new File(SETTINGS_FILE);
 
         if (!file.exists()) {
-            FileWriter writer = null;
+
             try {
-
                 if (new File(APP_DIRECTORY).mkdir()) {
-
-                    String contentFile = "<list></list>";
                     file.createNewFile();
-                    writer = new FileWriter(file);
-                    writer.append(contentFile);
-                    writer.close();
+                    save(new ArrayList<ConnectionBean>());
                 }
             }
             catch (IOException e) {
                 e.printStackTrace();
-            }
-            finally {
-                if (writer != null) {
-                    try {
-                        writer.close();
-                    }
-                    catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
             }
         }
 
@@ -70,34 +54,59 @@ public class LoadSettings {
     @SuppressWarnings("unchecked")
     public List<ConnectionBean> load() {
 
-        if (connections == null) {
+        List<ConnectionBean> connections = null;
+        Reader reader = null;
+        try {
 
-            Reader reader = null;
+            reader = new FileReader(file);
+            connections = (List<ConnectionBean>) getXStream().fromXML(reader);
+
+        }
+        catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        finally {
             try {
-                XStream xstream = new XStream(new DomDriver());
-                xstream.alias("connection", DBConnectionBeanImpl.class);
-                try {
-                    reader = new FileReader(file);
+                if (reader != null) {
+                    reader.close();
                 }
-                catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-                xstream.alias("ConnectionBean", ConnectionBean.class, DBConnectionBeanImpl.class);
-                connections = (List<ConnectionBean>) xstream.fromXML(reader);
-
             }
-            finally {
-                try {
-                    if (reader != null) {
-                        reader.close();
-                    }
-                }
-                catch (IOException e) {
-                    e.printStackTrace();
-                }
+            catch (IOException e) {
+                e.printStackTrace();
             }
         }
         return connections;
+
+    }
+
+    private XStream getXStream() {
+        XStream xstream = new XStream(new DomDriver());
+        xstream.alias("ConnectionBean", ConnectionBean.class, DBConnectionBeanImpl.class);
+        return xstream;
+    }
+
+    public void save(List<ConnectionBean> list) {
+
+        FileWriter writer = null;
+        try {
+
+            String contentFile = getXStream().toXML(list);
+            writer = new FileWriter(file);
+            writer.append(contentFile);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        finally {
+            try {
+                writer.close();
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+
     }
 
 }

@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -32,7 +33,7 @@ public class DBSelector extends JPanel {
     private JComboBox connectionList;
     protected static JFrame frame;
     private List<ConnectionBean> connections;
-
+    
     public DBSelector() {
 
         super(new BorderLayout());
@@ -48,8 +49,8 @@ public class DBSelector extends JPanel {
                 
                 if (conn.isEmpty()) {
                     System.out.println("new connection...");
-                    new ConnectionEditor();
-                    frame.setVisible(false);
+                    showConnectionEditor();
+                    
                 }else{
                     updateLabel(conn);
                     connectionBean = conn;
@@ -81,6 +82,10 @@ public class DBSelector extends JPanel {
         add(picture, BorderLayout.CENTER);
         add(connectButton, BorderLayout.PAGE_END);
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        
+        if(beans.length==1){
+            showConnectionEditor();
+        }
     }
 
     /**
@@ -91,7 +96,7 @@ public class DBSelector extends JPanel {
     private ConnectionBean[] getDBConnectionBeans() {
         
         if(connections==null){
-            connections = LoadSettings.getInstance().load();
+            connections = new ArrayList<ConnectionBean>(LoadSettings.getInstance().load());
             connections.add(new ConnectionBeanEmpty());
         }
         
@@ -148,6 +153,11 @@ public class DBSelector extends JPanel {
 
         frame.pack();
         frame.setVisible(true);
+    }
+    
+    private void showConnectionEditor(){
+        frame.setVisible(false);
+        new ConnectionEditor();
     }
 
     public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
