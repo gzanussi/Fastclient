@@ -80,13 +80,13 @@ public class ConnectionBeanEmpty implements ConnectionBean {
     }
 
     @Override
-    public String getImmageName() {
+    public String getImageName() {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public void setImmageName(String immageName) {
+    public void setImageName(String immageName) {
         // TODO Auto-generated method stub
         
     }

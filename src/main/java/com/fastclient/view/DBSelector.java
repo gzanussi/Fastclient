@@ -8,11 +8,10 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.BorderFactory;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -22,36 +21,38 @@ import javax.swing.UnsupportedLookAndFeelException;
 import com.fastclient.jdbc.LoadSettings;
 import com.fastclient.model.ConnectionBean;
 import com.fastclient.model.ConnectionBeanEmpty;
+import com.fastclient.util.ScreenUtil;
 
-@SuppressWarnings("serial")
-public class DBSelector extends JPanel {
+public class DBSelector {
 
     private static final String IMAGES_PATH = "images/";
     private JLabel picture;
     private static ConnectionBean connectionBean;
     private JButton connectButton;
     private JComboBox connectionList;
-    protected static JFrame frame;
+    protected JFrame frame;
     private List<ConnectionBean> connections;
-    
+
     public DBSelector() {
 
-        super(new BorderLayout());
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setOpaque(true);
 
         ConnectionBean[] beans = getDBConnectionBeans();
-        connectionList = new JComboBox(getDBConnectionBeans());
+        connectionList = new JComboBox();
+        refreshConnectionList();
         connectionList.setSelectedIndex(0);
         connectionList.addActionListener(new ActionListener() {
-            
+
             public void actionPerformed(ActionEvent e) {
+
                 JComboBox cb = (JComboBox) e.getSource();
                 ConnectionBean conn = (ConnectionBean) cb.getSelectedItem();
-                
+
                 if (conn.isEmpty()) {
-                    System.out.println("new connection...");
                     showConnectionEditor();
-                    
-                }else{
+                }
+                else {
                     updateLabel(conn);
                     connectionBean = conn;
                 }
@@ -63,29 +64,36 @@ public class DBSelector extends JPanel {
         picture.setFont(picture.getFont().deriveFont(Font.ITALIC));
         picture.setHorizontalAlignment(JLabel.CENTER);
         updateLabel(beans[connectionList.getSelectedIndex()]);
-        picture.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
 
         picture.setPreferredSize(new Dimension(177, 122 + 10));
+
+        final DBSelector dbSelector = this;
 
         connectButton = new JButton("connect");
         connectButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("connecting to data base: " + getDBConnectionBean().getConnectionName());
-                new Main(getDBConnectionBean());
+                new Main(getDBConnectionBean(), dbSelector);
                 frame.setVisible(false);
 
             }
         });
 
-        add(connectionList, BorderLayout.PAGE_START);
-        add(picture, BorderLayout.CENTER);
-        add(connectButton, BorderLayout.PAGE_END);
-        setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        
-        if(beans.length==1){
+        panel.add(connectionList, BorderLayout.PAGE_START);
+        panel.add(picture, BorderLayout.CENTER);
+        panel.add(connectButton, BorderLayout.PAGE_END);
+
+        frame = new JFrame("Fastclient");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setContentPane(panel);
+        frame.pack();
+        frame.setVisible(true);
+        ScreenUtil.centerScreen(frame);
+        if (beans.length == 1) {
             showConnectionEditor();
         }
+
     }
 
     /**
@@ -94,12 +102,10 @@ public class DBSelector extends JPanel {
      * @return
      */
     private ConnectionBean[] getDBConnectionBeans() {
-        
-        if(connections==null){
-            connections = new ArrayList<ConnectionBean>(LoadSettings.getInstance().load());
-            connections.add(new ConnectionBeanEmpty());
-        }
-        
+
+        connections = new ArrayList<ConnectionBean>(LoadSettings.getInstance().load());
+        connections.add(new ConnectionBeanEmpty());
+
         return connections.toArray(new ConnectionBean[0]);
     }
 
@@ -112,7 +118,7 @@ public class DBSelector extends JPanel {
     }
 
     protected void updateLabel(ConnectionBean name) {
-        ImageIcon icon = createImageIcon(IMAGES_PATH + name.getImmageName());
+        ImageIcon icon = createImageIcon(IMAGES_PATH + name.getImageName());
         picture.setIcon(icon);
         picture.setToolTipText("A drawing of a " + name.getConnectionName());
         if (icon != null) {
@@ -139,25 +145,17 @@ public class DBSelector extends JPanel {
         }
     }
 
-    /**
-     * Create the GUI and show it. For thread safety, this method should be
-     * invoked from the event-dispatching thread.
-     */
-    private static void createAndShowGUI() {
-        frame = new JFrame("Fastclient");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        JComponent newContentPane = new DBSelector();
-        newContentPane.setOpaque(true); // content panes must be opaque
-        frame.setContentPane(newContentPane);
-
-        frame.pack();
-        frame.setVisible(true);
-    }
-    
-    private void showConnectionEditor(){
+    private void showConnectionEditor() {
         frame.setVisible(false);
-        new ConnectionEditor();
+        new ConnectionEditor(this);
+    }
+
+    public void refreshConnectionList() {
+        connectionList.setModel(new DefaultComboBoxModel(getDBConnectionBeans()));
+    }
+
+    public void showWindow() {
+        this.frame.setVisible(true);
     }
 
     public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
@@ -168,8 +166,9 @@ public class DBSelector extends JPanel {
         // creating and showing this application's GUI.
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                createAndShowGUI();
+                new DBSelector();
             }
         });
     }
+
 }

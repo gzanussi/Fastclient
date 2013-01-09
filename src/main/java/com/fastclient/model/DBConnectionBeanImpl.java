@@ -1,9 +1,11 @@
 package com.fastclient.model;
 
+import java.util.Vector;
+
 public class DBConnectionBeanImpl implements ConnectionBean {
 
 	private String connectionName;
-	private String immageName;
+	private String imageName;
 	private String user;
 	private String password;
 	private String schema;
@@ -12,7 +14,7 @@ public class DBConnectionBeanImpl implements ConnectionBean {
 
 	public DBConnectionBeanImpl(String connectionName, String immageName) {
 		this.connectionName = connectionName;
-		this.immageName = immageName;
+		this.imageName = immageName;
 	}
 
 	public DBConnectionBeanImpl(String connectionName) {
@@ -23,7 +25,19 @@ public class DBConnectionBeanImpl implements ConnectionBean {
 	
 	}
 	
-	/* (non-Javadoc)
+	public DBConnectionBeanImpl(Vector<String> vector) {
+	    connectionName = vector.get(0);
+	    imageName = vector.get(1);
+	    user = vector.get(2);
+	    password = vector.get(3);
+	    schema = vector.get(4);
+	    url = vector.get(5);
+	    driver = vector.get(6);
+    }
+	
+    
+
+    /* (non-Javadoc)
      * @see com.german.model.ConnectionBean#getConnectionName()
      */
 	@Override
@@ -113,16 +127,16 @@ public class DBConnectionBeanImpl implements ConnectionBean {
      * @see com.german.model.ConnectionBean#getImmageName()
      */
 	@Override
-    public String getImmageName() {
-		return (immageName!=null && immageName!="")?immageName:"default.gif";
+    public String getImageName() {
+		return (imageName!=null && imageName!="")?imageName:"default.gif";
 	}
 
 	/* (non-Javadoc)
      * @see com.german.model.ConnectionBean#setImmageName(java.lang.String)
      */
 	@Override
-    public void setImmageName(String immageName) {
-		this.immageName = immageName;
+    public void setImageName(String immageName) {
+		this.imageName = immageName;
 	}
 
 	@Override

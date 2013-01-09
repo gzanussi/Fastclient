@@ -63,7 +63,7 @@ public class Main {
     private final DefaultMutableTreeNode tablas = new DefaultMutableTreeNode("Tablas");
     private final DefaultMutableTreeNode vistas = new DefaultMutableTreeNode("Vistas");
 
-    public Main(final ConnectionBean connectionBean) {
+    public Main(final ConnectionBean connectionBean, final DBSelector dbSelector) {
 
         this.coneccion = new Coneccion(connectionBean);
         ventana.setTitle(ventana.getTitle() + " - " + connectionBean.getUser());
@@ -74,7 +74,7 @@ public class Main {
                 try {
                     System.out.println("closing Data Base connection");
                     coneccion.getConnection().close();
-                    DBSelector.frame.setVisible(true);
+                    dbSelector.showWindow();
                 }
                 catch (SQLException e) {
                     e.printStackTrace();

@@ -28,8 +28,8 @@ public interface ConnectionBean {
 
     public abstract void setDriver(String driver);
 
-    public abstract String getImmageName();
+    public abstract String getImageName();
 
-    public abstract void setImmageName(String immageName);
+    public abstract void setImageName(String immageName);
 
 }
