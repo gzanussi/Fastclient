@@ -38,6 +38,7 @@ import com.fastclient.model.ConnectionBean;
 import com.fastclient.model.PrimaryKeyElement;
 import com.fastclient.model.SQLResult;
 import com.fastclient.model.TreeNodeCustom;
+import com.fastclient.util.ScreenUtil;
 
 /**
  * @author German Zanussi
@@ -117,6 +118,8 @@ public class Main {
         ventana.getContentPane().add(panel4, BorderLayout.SOUTH);
         ventana.setSize(1000, 820);
         ventana.setVisible(true);
+        
+        ScreenUtil.centerScreen(ventana);
     }
 
     /**
