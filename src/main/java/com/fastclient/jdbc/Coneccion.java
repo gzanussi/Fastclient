@@ -127,7 +127,7 @@ public class Coneccion{
 		
 		try {
 			DatabaseMetaData dbmdata = conn.getMetaData();
-			ResultSet tableTypes = dbmdata.getTables(null, DBConnectionService.getSchema(),"%",types);
+			ResultSet tableTypes = dbmdata.getTables(null, connectionBean.getSchema(),"%",types);
 		    while(tableTypes.next()){
 	        	tablas.add(tableTypes.getString( tableTypes.findColumn( "TABLE_NAME" ) ) );
 		    }
@@ -198,7 +198,7 @@ public class Coneccion{
 	public List<String> getColumnsNameForTable(String tableName){
 		
 		List<String> result = new ArrayList<String>();
-		String catalog = DBConnectionService.getSchema();
+		String catalog = connectionBean.getSchema();
 		String schemaPattern =null;
 		String columnNamePattern = "%";
 		ResultSet columns = null;
@@ -235,7 +235,7 @@ public class Coneccion{
 		
 		Connection connection = getConnection();
 		String schemaPattern =null;
-		String catalog = DBConnectionService.getSchema();
+		String catalog = connectionBean.getSchema();
 		List<PrimaryKeyElement> keys = new ArrayList<PrimaryKeyElement>();
 		
 		ResultSet primaryKeys;
@@ -262,7 +262,7 @@ public class Coneccion{
 	 */
 	private PositionType getPosicion(String columnName, String tableName) {
 		
-		String catalog = DBConnectionService.getSchema();
+		String catalog = connectionBean.getSchema();
 		String schemaPattern =null;
 		String columnNamePattern = "%";
 		ResultSet columns = null;

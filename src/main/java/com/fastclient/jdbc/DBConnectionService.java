@@ -9,19 +9,15 @@ import com.fastclient.util.JarLoader;
 
 public final class DBConnectionService {
 
-    private static ConnectionBean connectionBean;
-
     public static Connection establishConnectionWith(final ConnectionBean connectionBean) {
 
-        DBConnectionService.connectionBean = connectionBean;
         Connection conn = null;
         try {
 
             ClassLoader classLoader = new JarLoader().getClassLoaderForExtraModule();
-            Driver d = (Driver)Class.forName(connectionBean.getDriver(), true, classLoader).newInstance();
+            Driver d = (Driver) Class.forName(connectionBean.getDriver(), true, classLoader).newInstance();
             DriverManager.registerDriver(new DriverShim(d));
             return DriverManager.getConnection(connectionBean.getUrl(), connectionBean.getUser(), connectionBean.getPassword());
-
 
         }
         catch (Exception e) {
@@ -30,10 +26,6 @@ public final class DBConnectionService {
         }
 
         return conn;
-    }
-
-    public static String getSchema() {
-        return connectionBean.getSchema();
     }
 
 }
