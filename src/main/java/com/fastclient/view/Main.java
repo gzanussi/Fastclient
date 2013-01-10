@@ -59,7 +59,7 @@ public class Main {
     private final JFrame ventana = new JFrame("Fastclient");
     private final JPanel panel = new JPanel();
     private final JPanel panel2 = new JPanel();
-    private final JPanel panel4 = new JPanel();
+    private final JPanel panel3 = new JPanel();
     private final DefaultMutableTreeNode root = new DefaultMutableTreeNode("root");
     private final DefaultMutableTreeNode tablas = new DefaultMutableTreeNode("Tablas");
     private final DefaultMutableTreeNode vistas = new DefaultMutableTreeNode("Vistas");
@@ -67,7 +67,7 @@ public class Main {
     public Main(final ConnectionBean connectionBean, final DBSelector dbSelector) {
 
         this.coneccion = new Coneccion(connectionBean);
-        ventana.setTitle(ventana.getTitle() + " - " + connectionBean.getUser());
+        ventana.setTitle(ventana.getTitle() + " - " + connectionBean.getConnectionName());
         tabla.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
         ventana.addWindowListener(new WindowAdapter() {
@@ -105,17 +105,17 @@ public class Main {
 
         scrollTree.setPreferredSize(new Dimension(240, 650));
         scrollTable.setPreferredSize(new Dimension(640, 550));
-
+        
         panel2.add(scrollTree);
         panel2.add(scrollTable);
-        panel4.add(label);
-        panel4.add(cantidadRows);
-        panel4.add(botonDelete);
+        panel3.add(label);
+        panel3.add(cantidadRows);
+        panel3.add(botonDelete);
 
         ventana.getContentPane().setLayout(new BorderLayout());
         ventana.getContentPane().add(panel, BorderLayout.NORTH);
         ventana.getContentPane().add(panel2, BorderLayout.CENTER);
-        ventana.getContentPane().add(panel4, BorderLayout.SOUTH);
+        ventana.getContentPane().add(panel3, BorderLayout.SOUTH);
         ventana.setSize(1000, 820);
         ventana.setVisible(true);
         
