@@ -14,6 +14,8 @@ public final class DBConnectionService {
         Connection conn = null;
         try {
 
+            System.out.println("creating connection");
+            
             ClassLoader classLoader = new JarLoader().getClassLoaderForExtraModule();
             Driver d = (Driver) Class.forName(connectionBean.getDriver(), true, classLoader).newInstance();
             DriverManager.registerDriver(new DriverShim(d));

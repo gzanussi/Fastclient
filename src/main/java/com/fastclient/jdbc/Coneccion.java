@@ -15,15 +15,13 @@ import com.fastclient.model.PrimaryKeyElement;
 import com.fastclient.model.SQLResult;
 
 public class Coneccion{
-	
+
+    private Connection connection;
 	private ConnectionBean connectionBean;
-	
 	
 	public Coneccion(final ConnectionBean bean) {
 		this.connectionBean = bean;
 	}
-
-
 
 	/**
 	 *  Ejecuta el sql dado.
@@ -73,8 +71,6 @@ public class Coneccion{
 			rollback(connection);
 			e.printStackTrace();
 		
-		}finally{
-			closeConnection(connection);
 		}
 		
 		return result;
@@ -136,8 +132,6 @@ public class Coneccion{
 		} catch (SQLException e) {
 			rollback(conn);
 			e.printStackTrace();
-		}finally{
-			closeConnection(conn);
 		}
 		return tablas;
 	}
@@ -183,8 +177,6 @@ public class Coneccion{
 		    rollback(connection);
 			e.printStackTrace();
 			throw new RuntimeException(e.getMessage());
-		}finally{
-			closeConnection(connection);
 		}
 		return resultado.toString();
 	}
@@ -213,10 +205,7 @@ public class Coneccion{
 		} catch (SQLException e) {
 			e.printStackTrace();
 			rollback(connection);
-		}finally{
-			closeConnection(connection);
 		}
-		
 		return result;
 		
 	}
@@ -250,7 +239,6 @@ public class Coneccion{
 			e.printStackTrace();
 		}
 		
-		closeConnection(connection);   
 		return keys; 
 	}
 
@@ -287,19 +275,12 @@ public class Coneccion{
 
 
 	public Connection getConnection(){
-		return DBConnectionService.establishConnectionWith(connectionBean);
+	    if(connection== null){
+	        connection = DBConnectionService.establishConnectionWith(connectionBean);
+	    }
+		return connection;
 	}
 	
-	private void closeConnection(Connection connection){
-		try {
-			if (connection != null){
-				connection.close();	
-			}
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
 	
 	private final class PositionType{
 
