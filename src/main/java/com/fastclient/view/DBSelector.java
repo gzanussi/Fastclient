@@ -21,7 +21,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import com.fastclient.model.ConnectionBean;
 import com.fastclient.model.ConnectionBeanEmpty;
-import com.fastclient.util.LoadSettings;
+import com.fastclient.util.LoaderSettings;
 import com.fastclient.util.ScreenUtil;
 
 public class DBSelector {
@@ -105,7 +105,7 @@ public class DBSelector {
      */
     private ConnectionBean[] getDBConnectionBeans() {
 
-        connections = new ArrayList<ConnectionBean>(LoadSettings.getInstance().load());
+        connections = new ArrayList<ConnectionBean>(LoaderSettings.getInstance().load());
         connections.add(new ConnectionBeanEmpty());
 
         return connections.toArray(new ConnectionBean[0]);
@@ -163,7 +163,7 @@ public class DBSelector {
     public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
 
         UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
-
+        
         // Schedule a job for the event-dispatching thread:
         // creating and showing this application's GUI.
         javax.swing.SwingUtilities.invokeLater(new Runnable() {

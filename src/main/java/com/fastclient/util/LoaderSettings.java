@@ -14,18 +14,18 @@ import com.fastclient.model.DBConnectionBeanImpl;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 
-public class LoadSettings {
+public class LoaderSettings {
 
-    private static final String HOME_DIRECTORY = System.getProperty("user.home");
-    private static final String FILE_SEPARATOR = System.getProperty("file.separator");
-    private static final String APP_DIRECTORY = HOME_DIRECTORY + FILE_SEPARATOR + ".fastclient";
-    private static final String SETTINGS_FILE = APP_DIRECTORY + FILE_SEPARATOR + "settings.xml";
-    private static final String IMAGE_DIRECTORY = APP_DIRECTORY + FILE_SEPARATOR + "images";
-    private static final String LIB_DIRECTORY = APP_DIRECTORY + FILE_SEPARATOR + "lib";
+    public static final String HOME_DIRECTORY = System.getProperty("user.home");
+    public static final String FILE_SEPARATOR = System.getProperty("file.separator");
+    public static final String APP_DIRECTORY = HOME_DIRECTORY + FILE_SEPARATOR + ".fastclient";
+    public static final String SETTINGS_FILE = APP_DIRECTORY + FILE_SEPARATOR + "settings.xml";
+    public static final String IMAGE_DIRECTORY = APP_DIRECTORY + FILE_SEPARATOR + "images";
+    public static final String LIB_DIRECTORY = APP_DIRECTORY + FILE_SEPARATOR + "lib";
     private File file;
-    private static LoadSettings instance;
+    private static LoaderSettings instance;
 
-    private LoadSettings() {
+    private LoaderSettings() {
 
         checkDirectories();
         file = new File(SETTINGS_FILE);
@@ -53,10 +53,10 @@ public class LoadSettings {
 
     }
 
-    public static LoadSettings getInstance() {
+    public static LoaderSettings getInstance() {
 
         if (instance == null) {
-            instance = new LoadSettings();
+            instance = new LoaderSettings();
         }
 
         return instance;
@@ -119,5 +119,11 @@ public class LoadSettings {
         }
 
     }
-
+    
+    public static String[] getDriverNames(){
+        File file = new File(LIB_DIRECTORY);
+        String[] list = file.list();
+        return list;
+    }
+    
 }

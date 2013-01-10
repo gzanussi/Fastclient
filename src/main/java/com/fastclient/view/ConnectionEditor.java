@@ -19,7 +19,7 @@ import javax.swing.table.DefaultTableModel;
 
 import com.fastclient.model.ConnectionBean;
 import com.fastclient.model.DBConnectionBeanImpl;
-import com.fastclient.util.LoadSettings;
+import com.fastclient.util.LoaderSettings;
 import com.fastclient.util.ScreenUtil;
 
 public class ConnectionEditor {
@@ -74,7 +74,7 @@ public class ConnectionEditor {
                 for (Object vector : model.getDataVector()) {
                     connections.add(new DBConnectionBeanImpl((Vector<String>)vector));
                 }
-                LoadSettings.getInstance().save(connections);
+                LoaderSettings.getInstance().save(connections);
                 dbSelector.refreshConnectionList();
                 dbSelector.frame.setVisible(true);
                 frame.dispose();
@@ -102,7 +102,7 @@ public class ConnectionEditor {
 
     private JTable createGridList() {
 
-        List<ConnectionBean> connections = LoadSettings.getInstance().load();
+        List<ConnectionBean> connections = LoaderSettings.getInstance().load();
 
         Object columnNames[] = { "Name", "Image", "User", "Password", "Schema", "Url" , "Driver" };
         Object rowData[][] = new Object[connections.size()][columnNames.length];
