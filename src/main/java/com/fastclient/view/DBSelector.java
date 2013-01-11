@@ -26,7 +26,6 @@ import com.fastclient.util.ScreenUtil;
 
 public class DBSelector {
 
-    private static final String IMAGES_PATH = "images/";
     private JLabel picture;
     private static ConnectionBean connectionBean;
     private JButton connectButton;
@@ -120,7 +119,7 @@ public class DBSelector {
     }
 
     protected void updateLabel(ConnectionBean name) {
-        ImageIcon icon = createImageIcon(IMAGES_PATH + name.getImageName());
+        ImageIcon icon = createImageIcon(LoaderSettings.IMAGE_DIRECTORY +LoaderSettings.FILE_SEPARATOR +  name.getImageName());
         picture.setIcon(icon);
         picture.setToolTipText("A drawing of a " + name.getConnectionName());
         if (icon != null) {

@@ -41,7 +41,7 @@ public class ConnectionEditor {
         frame.add(BorderLayout.NORTH, new JLabel("Connection List"));
         JTable gridList = createGridList();
         createButtons(gridList);
-        frame.setSize(800, 600);
+        frame.setSize(1000, 200);
         
         ScreenUtil.centerScreen(frame);
         frame.setVisible(true);
