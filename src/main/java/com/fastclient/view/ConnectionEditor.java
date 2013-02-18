@@ -5,20 +5,24 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 
 import com.fastclient.model.ConnectionBean;
 import com.fastclient.model.DBConnectionBeanImpl;
+import com.fastclient.util.FileUtils;
 import com.fastclient.util.LoaderSettings;
 import com.fastclient.util.ScreenUtil;
 
@@ -92,10 +96,32 @@ public class ConnectionEditor {
             }
         });
 
+        JButton addDriverButton = new JButton("Add driver");
+        addDriverButton.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                JFileChooser chooser = new JFileChooser();
+                FileNameExtensionFilter filter = new FileNameExtensionFilter("Jar & Zip files", "jar", "zip");
+                chooser.setFileFilter(filter);
+                int returnVal = chooser.showOpenDialog(frame);
+                if(returnVal == JFileChooser.APPROVE_OPTION) {
+                    String choosedFileName = chooser.getSelectedFile().getAbsolutePath();
+                    File choosedFile = new File(choosedFileName);
+                    FileUtils.copyFile(choosedFile);
+                
+                }
+                
+            }
+        });
+
+        
         JPanel panel = new JPanel();
         panel.add(newButton);
         panel.add(saveButton);
         panel.add(removeButton);
+        panel.add(addDriverButton);
         frame.add(BorderLayout.SOUTH, panel);
         
     }

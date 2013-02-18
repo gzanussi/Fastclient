@@ -93,7 +93,7 @@ public class ConnectionBeanEmpty implements ConnectionBean {
     
     @Override
     public String toString() {
-        return "new connection...";
+        return "edit connections...";
     }
 
 }
