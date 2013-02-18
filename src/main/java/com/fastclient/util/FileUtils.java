@@ -10,7 +10,7 @@ import java.io.OutputStream;
 
 public final class FileUtils {
 
-    public static void copyFile(final File fileIn) {
+    public static void copyJarFileToLib(final File fileIn) {
         
         File f2 = null;
         InputStream in = null;

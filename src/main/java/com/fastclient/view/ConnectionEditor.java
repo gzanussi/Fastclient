@@ -109,7 +109,7 @@ public class ConnectionEditor {
                 if(returnVal == JFileChooser.APPROVE_OPTION) {
                     String choosedFileName = chooser.getSelectedFile().getAbsolutePath();
                     File choosedFile = new File(choosedFileName);
-                    FileUtils.copyFile(choosedFile);
+                    FileUtils.copyJarFileToLib(choosedFile);
                 
                 }
                 
