@@ -49,7 +49,7 @@ public class Main {
     private Coneccion coneccion;
     private final JTable tabla = new JTable();
     private final JTextComponent texto = new JTextArea(5, 70);
-    private final JTextField cantidadRows = new JTextField("10", 4);
+    private final JTextField cantidadRows = new JTextField("20", 4);
     private final JLabel label = new JLabel("Cantidad de Filas:", JLabel.RIGHT);
     private final JButton botonExecute = new JButton("Execute");
     private final JButton botonDelete = new JButton("Delete rows selected");

@@ -34,7 +34,7 @@ public class ConnectionEditor {
     public ConnectionEditor(final DBSelector dbSelector) {
         super();
         this.dbSelector = dbSelector;
-        
+
         frame.setVisible(true);
         frame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent evt) {
@@ -46,7 +46,7 @@ public class ConnectionEditor {
         JTable gridList = createGridList();
         createButtons(gridList);
         frame.setSize(1000, 200);
-        
+
         ScreenUtil.centerScreen(frame);
         frame.setVisible(true);
 
@@ -76,7 +76,7 @@ public class ConnectionEditor {
                 DefaultTableModel model = (DefaultTableModel) gridList.getModel();
                 List<ConnectionBean> connections = new ArrayList<ConnectionBean>();
                 for (Object vector : model.getDataVector()) {
-                    connections.add(new DBConnectionBeanImpl((Vector<String>)vector));
+                    connections.add(new DBConnectionBeanImpl((Vector<String>) vector));
                 }
                 LoaderSettings.getInstance().save(connections);
                 dbSelector.refreshConnectionList();
@@ -106,31 +106,28 @@ public class ConnectionEditor {
                 FileNameExtensionFilter filter = new FileNameExtensionFilter("Jar & Zip files", "jar", "zip");
                 chooser.setFileFilter(filter);
                 int returnVal = chooser.showOpenDialog(frame);
-                if(returnVal == JFileChooser.APPROVE_OPTION) {
+                if (returnVal == JFileChooser.APPROVE_OPTION) {
                     String choosedFileName = chooser.getSelectedFile().getAbsolutePath();
                     File choosedFile = new File(choosedFileName);
                     FileUtils.copyJarFileToLib(choosedFile);
-                
                 }
-                
             }
         });
 
-        
         JPanel panel = new JPanel();
         panel.add(newButton);
         panel.add(saveButton);
         panel.add(removeButton);
         panel.add(addDriverButton);
         frame.add(BorderLayout.SOUTH, panel);
-        
+
     }
 
     private JTable createGridList() {
 
         List<ConnectionBean> connections = LoaderSettings.getInstance().load();
 
-        Object columnNames[] = { "Name", "Image", "User", "Password", "Schema", "Url" , "Driver" };
+        Object columnNames[] = { "Name", "Image", "User", "Password", "Schema", "Url", "Driver" };
         Object rowData[][] = new Object[connections.size()][columnNames.length];
 
         for (int i = 0; i < rowData.length; i++) {
