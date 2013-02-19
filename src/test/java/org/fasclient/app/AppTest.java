@@ -1,4 +1,4 @@
-package org.german.app;
+package org.fasclient.app;
 
 import junit.framework.Test;
 import junit.framework.TestCase;

@@ -29,7 +29,7 @@ public class DBSelector {
     private JLabel picture;
     private static ConnectionBean connectionBean;
     private JButton connectButton;
-    private JComboBox connectionList;
+    private JComboBox<ConnectionBean> connectionList;
     protected JFrame frame;
     private List<ConnectionBean> connections;
 
@@ -40,14 +40,15 @@ public class DBSelector {
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         ConnectionBean[] beans = getDBConnectionBeans();
-        connectionList = new JComboBox();
+        connectionList = new JComboBox<ConnectionBean>();
         refreshConnectionList();
         connectionList.setSelectedIndex(0);
         connectionList.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
 
-                JComboBox cb = (JComboBox) e.getSource();
+                @SuppressWarnings("unchecked")
+                JComboBox<ConnectionBean> cb = (JComboBox<ConnectionBean>) e.getSource();
                 ConnectionBean conn = (ConnectionBean) cb.getSelectedItem();
 
                 if (conn.isEmpty()) {
@@ -152,7 +153,7 @@ public class DBSelector {
     }
 
     public void refreshConnectionList() {
-        connectionList.setModel(new DefaultComboBoxModel(getDBConnectionBeans()));
+        connectionList.setModel(new DefaultComboBoxModel<ConnectionBean>(getDBConnectionBeans()));
     }
 
     public void showWindow() {

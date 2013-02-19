@@ -52,11 +52,7 @@ public class JarLoader {
                 }
             }
         }
+        jf.close();
     }
 
-    
-    public static void main(String[] args) throws IOException {
-        new JarLoader().getClassLoaderForExtraModule();
-    }
-    
 }

@@ -51,19 +51,24 @@ public class Main {
     private final JTextComponent texto = new JTextArea(5, 70);
     private final JTextField cantidadRows = new JTextField("20", 4);
     private final JLabel label = new JLabel("Cantidad de Filas:", JLabel.RIGHT);
-    private final JButton botonExecute = new JButton("Execute");
+    private final JButton executeButton = new JButton("Execute");
+    private final JButton insertButton = new JButton("Insert Template");
+    private final JButton deleteButton = new JButton("Delete Template");
     private final JButton botonDelete = new JButton("Delete rows selected");
     private final JTree tree = new JTree();
     private final JScrollPane scrollTree = new JScrollPane(tree);
     private final JScrollPane scrollTable = new JScrollPane(tabla);
     private final JFrame ventana = new JFrame("Fastclient");
     private final JPanel panel = new JPanel();
+    private final JPanel buttonsPanel= new JPanel();
     private final JPanel panel2 = new JPanel();
     private final JPanel panel3 = new JPanel();
     private final DefaultMutableTreeNode root = new DefaultMutableTreeNode("root");
-    private final DefaultMutableTreeNode tablas = new DefaultMutableTreeNode("Tablas");
-    private final DefaultMutableTreeNode vistas = new DefaultMutableTreeNode("Vistas");
+    private final DefaultMutableTreeNode tables = new DefaultMutableTreeNode("Tables");
+    private final DefaultMutableTreeNode views = new DefaultMutableTreeNode("Views");
 
+    private DefaultMutableTreeNode currentNode;
+    
     public Main(final ConnectionBean connectionBean, final DBSelector dbSelector) {
 
         this.coneccion = new Coneccion(connectionBean);
@@ -84,11 +89,46 @@ public class Main {
             }
         });
 
-        botonExecute.addActionListener(new ActionListener() {
+        executeButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 refreshModel(texto.getText());
             }
         });
+        
+        insertButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                StringBuilder sql = new StringBuilder();
+                sql.append("insert into "+currentNode.getUserObject()+"\n(");
+        
+                List<String> columnsNameForTable = getConeccion().getColumnsNameForTable(currentNode.getUserObject().toString());
+                Iterator<String> iterator = columnsNameForTable.iterator();
+                StringBuffer defaultValues = new StringBuffer();
+                defaultValues.append("\nvalues (");
+                while (iterator.hasNext()) {
+                    
+                    String columnName = (String) iterator.next();
+                    sql.append(columnName.split(":")[0]);
+                    defaultValues.append("null");
+                    
+                    if(iterator.hasNext()){
+                        sql.append(",");
+                        defaultValues.append(",");
+                    }
+                }
+                
+                sql.append(")");
+                defaultValues.append(")");
+                sql.append(defaultValues);
+                texto.setText(sql.toString());
+            }
+        });
+        
+        deleteButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                texto.setText("delete from "+currentNode.getUserObject());
+            }
+        });
+        
 
         botonDelete.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
@@ -101,8 +141,12 @@ public class Main {
         tree.addMouseListener(new AdaptadorMouse());
 
         panel.add(new JScrollPane(texto));
-        panel.add(botonExecute);
-
+        buttonsPanel.setLayout(new BorderLayout());
+        buttonsPanel.add(executeButton,BorderLayout.NORTH);
+        buttonsPanel.add(insertButton,BorderLayout.CENTER);
+        buttonsPanel.add(deleteButton,BorderLayout.SOUTH);
+        panel.add(buttonsPanel);
+        
         scrollTree.setPreferredSize(new Dimension(240, 650));
         scrollTable.setPreferredSize(new Dimension(640, 550));
         
@@ -128,15 +172,18 @@ public class Main {
      */
     private DefaultTreeModel addChildToTree() {
 
-        root.add(tablas);
-        root.add(vistas);
+        root.add(tables);
 
         for (String nameTable : getConeccion().showAllTables()) {
-            tablas.add(new TreeNodeCustom(nameTable, this.coneccion));
+            tables.add(new TreeNodeCustom(nameTable, this.coneccion));
         }
-
+        
+        if(!getConeccion().showAllViews().isEmpty()){
+            root.add(views);
+        }
+        
         for (String nameView : getConeccion().showAllViews()) {
-            vistas.add(new TreeNodeCustom(nameView, this.coneccion));
+            views.add(new TreeNodeCustom(nameView, this.coneccion));
         }
 
         return new DefaultTreeModel(root);
@@ -261,7 +308,7 @@ public class Main {
                             node.add(new DefaultMutableTreeNode(columnName));
                         }
                     }
-                    else if (!node.equals(root) && !node.equals(tablas) && !node.equals(vistas)) {
+                    else if (!node.equals(root) && !node.equals(tables) && !node.equals(views)) {
                         node.removeAllChildren();
                     }
                     tree.repaint();
@@ -276,20 +323,22 @@ public class Main {
      * 
      */
     private class ListenerForTree implements TreeSelectionListener {
-        public void valueChanged(TreeSelectionEvent e) {
-            DefaultMutableTreeNode node = (DefaultMutableTreeNode) (e.getPath().getLastPathComponent());
+        
 
-            if (!node.equals(root)) {
-                if (node.getParent().equals(tablas) || node.getParent().equals(vistas)) {
-                    String tableName = node.getUserObject().toString();
+        public void valueChanged(TreeSelectionEvent e) {
+            currentNode = (DefaultMutableTreeNode) (e.getPath().getLastPathComponent());
+
+            if (!currentNode.equals(root)) {
+                if (currentNode.getParent().equals(tables) || currentNode.getParent().equals(views)) {
+                    String tableName = currentNode.getUserObject().toString();
                     String sql = "select * from " + tableName;
                     texto.setText(sql);
                     refreshModel(sql);
                 }
-                else if (!node.equals(root) && !node.equals(tablas) && !node.equals(vistas)) {
-                    String columnDescription = node.getUserObject().toString();
+                else if (!currentNode.equals(root) && !currentNode.equals(tables) && !currentNode.equals(views)) {
+                    String columnDescription = currentNode.getUserObject().toString();
                     String columnName = (new StringTokenizer(columnDescription, ":")).nextToken();
-                    String sql = "select " + columnName + " from " + node.getParent().toString();
+                    String sql = "select " + columnName + " from " + currentNode.getParent().toString();
                     texto.setText(sql);
                     refreshModel(sql);
                 }
