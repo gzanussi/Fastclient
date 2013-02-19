@@ -60,7 +60,7 @@ public class Main {
     private final JScrollPane scrollTable = new JScrollPane(tabla);
     private final JFrame ventana = new JFrame("Fastclient");
     private final JPanel panel = new JPanel();
-    private final JPanel buttonsPanel= new JPanel();
+    private final JPanel buttonsPanel = new JPanel();
     private final JPanel panel2 = new JPanel();
     private final JPanel panel3 = new JPanel();
     private final DefaultMutableTreeNode root = new DefaultMutableTreeNode("root");
@@ -68,7 +68,7 @@ public class Main {
     private final DefaultMutableTreeNode views = new DefaultMutableTreeNode("Views");
 
     private DefaultMutableTreeNode currentNode;
-    
+
     public Main(final ConnectionBean connectionBean, final DBSelector dbSelector) {
 
         this.coneccion = new Coneccion(connectionBean);
@@ -94,41 +94,40 @@ public class Main {
                 refreshModel(texto.getText());
             }
         });
-        
+
         insertButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 StringBuilder sql = new StringBuilder();
-                sql.append("insert into "+currentNode.getUserObject()+"\n(");
-        
+                sql.append("insert into " + currentNode.getUserObject() + "\n(");
+
                 List<String> columnsNameForTable = getConeccion().getColumnsNameForTable(currentNode.getUserObject().toString());
                 Iterator<String> iterator = columnsNameForTable.iterator();
                 StringBuffer defaultValues = new StringBuffer();
                 defaultValues.append("\nvalues (");
                 while (iterator.hasNext()) {
-                    
+
                     String columnName = (String) iterator.next();
                     sql.append(columnName.split(":")[0]);
                     defaultValues.append("null");
-                    
-                    if(iterator.hasNext()){
+
+                    if (iterator.hasNext()) {
                         sql.append(",");
                         defaultValues.append(",");
                     }
                 }
-                
+
                 sql.append(")");
                 defaultValues.append(")");
                 sql.append(defaultValues);
                 texto.setText(sql.toString());
             }
         });
-        
+
         deleteButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-                texto.setText("delete from "+currentNode.getUserObject());
+                texto.setText("delete from " + currentNode.getUserObject());
             }
         });
-        
 
         botonDelete.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
@@ -142,14 +141,14 @@ public class Main {
 
         panel.add(new JScrollPane(texto));
         buttonsPanel.setLayout(new BorderLayout());
-        buttonsPanel.add(executeButton,BorderLayout.NORTH);
-        buttonsPanel.add(insertButton,BorderLayout.CENTER);
-        buttonsPanel.add(deleteButton,BorderLayout.SOUTH);
+        buttonsPanel.add(executeButton, BorderLayout.NORTH);
+        buttonsPanel.add(insertButton, BorderLayout.CENTER);
+        buttonsPanel.add(deleteButton, BorderLayout.SOUTH);
         panel.add(buttonsPanel);
-        
+
         scrollTree.setPreferredSize(new Dimension(240, 650));
         scrollTable.setPreferredSize(new Dimension(640, 550));
-        
+
         panel2.add(scrollTree);
         panel2.add(scrollTable);
         panel3.add(label);
@@ -162,7 +161,7 @@ public class Main {
         ventana.getContentPane().add(panel3, BorderLayout.SOUTH);
         ventana.setSize(1000, 820);
         ventana.setVisible(true);
-        
+
         ScreenUtil.centerScreen(ventana);
     }
 
@@ -177,11 +176,11 @@ public class Main {
         for (String nameTable : getConeccion().showAllTables()) {
             tables.add(new TreeNodeCustom(nameTable, this.coneccion));
         }
-        
-        if(!getConeccion().showAllViews().isEmpty()){
+
+        if (!getConeccion().showAllViews().isEmpty()) {
             root.add(views);
         }
-        
+
         for (String nameView : getConeccion().showAllViews()) {
             views.add(new TreeNodeCustom(nameView, this.coneccion));
         }
@@ -323,7 +322,6 @@ public class Main {
      * 
      */
     private class ListenerForTree implements TreeSelectionListener {
-        
 
         public void valueChanged(TreeSelectionEvent e) {
             currentNode = (DefaultMutableTreeNode) (e.getPath().getLastPathComponent());
