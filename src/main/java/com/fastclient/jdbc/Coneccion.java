@@ -7,8 +7,10 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import com.fastclient.model.ConnectionBean;
 import com.fastclient.model.PrimaryKeyElement;
@@ -227,13 +229,18 @@ public class Coneccion{
 		String catalog = connectionBean.getSchema();
 		List<PrimaryKeyElement> keys = new ArrayList<PrimaryKeyElement>();
 		
+		Map<String,String> names = new HashMap<String,String>();
 		ResultSet primaryKeys;
 		try {
 			primaryKeys = connection.getMetaData().getPrimaryKeys(catalog, schemaPattern, tableName);
 			while (primaryKeys.next()) {
 				String columnName = primaryKeys.getString("COLUMN_NAME");
-				PositionType positionType = getPosicion(columnName,tableName);
-				keys.add(new PrimaryKeyElement(columnName,positionType.posicion,positionType.type));
+				if(!names.containsKey(columnName))
+				{
+				    PositionType positionType = getPosicion(columnName,tableName);
+				    keys.add(new PrimaryKeyElement(columnName,positionType.posicion,positionType.type));
+				}
+				names.put(columnName, columnName);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -243,7 +250,7 @@ public class Coneccion{
 	}
 
 	/**
-	 * Obtiene la posici�n de la columna columName en la tabla tableName.
+	 * Get column position from columName of given tableName.
 	 * @param columnName
 	 * @param tableName
 	 * @return

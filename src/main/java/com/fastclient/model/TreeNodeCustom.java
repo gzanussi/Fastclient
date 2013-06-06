@@ -17,7 +17,7 @@ import com.fastclient.jdbc.Coneccion;
 public class TreeNodeCustom extends DefaultMutableTreeNode{
 
 	
-	private Coneccion coneccion;
+
 	private String tableName;
 	private List<PrimaryKeyElement> primaryKeys;
 	
@@ -27,7 +27,11 @@ public class TreeNodeCustom extends DefaultMutableTreeNode{
 
 	public TreeNodeCustom(Object userObject, Coneccion coneccion) {
 		super(userObject);
-		this.coneccion = coneccion;
+		this.tableName = userObject.toString();
+		
+	      if(primaryKeys==null){
+	            primaryKeys = coneccion.getPrimaryKeys(tableName);
+	        }
 	}
 
 	public TreeNodeCustom(Object userObject) {
@@ -36,9 +40,7 @@ public class TreeNodeCustom extends DefaultMutableTreeNode{
 	}
 	
 	public List<PrimaryKeyElement> getPrimaryKeys() {
-		if(primaryKeys==null){
-			primaryKeys = coneccion.getPrimaryKeys(tableName);
-		}
+
 		return primaryKeys;
 	}
 	

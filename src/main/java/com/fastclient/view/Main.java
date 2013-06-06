@@ -253,6 +253,7 @@ public class Main {
      */
     private void refreshModelUpdateSQL(String sql) {
         String[] titColumna = { "Resultado" };
+
         String result = null;
         try {
             result = getConeccion().updateSQL(sql);
@@ -263,6 +264,7 @@ public class Main {
         Object[][] datoColumna = { { result } };
 
         tabla.setModel(new TableModel(datoColumna, titColumna));
+        
     }
 
     /**
