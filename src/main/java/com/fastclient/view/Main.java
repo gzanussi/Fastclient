@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.SQLException;
@@ -16,6 +17,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -26,9 +28,11 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTree;
+import javax.swing.SwingUtilities;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.table.TableColumn;
+import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.JTextComponent;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -66,15 +70,59 @@ public class Main {
     private final DefaultMutableTreeNode root = new DefaultMutableTreeNode("root");
     private final DefaultMutableTreeNode tables = new DefaultMutableTreeNode("Tables");
     private final DefaultMutableTreeNode views = new DefaultMutableTreeNode("Views");
-
+    private final JTextArea history = new JTextArea(10, 1);
     private DefaultMutableTreeNode currentNode;
-
+    private Action selectLine;
+    
     public Main(final ConnectionBean connectionBean, final DBSelector dbSelector) {
 
         this.coneccion = new Coneccion(connectionBean);
         ventana.setTitle(ventana.getTitle() + " - " + connectionBean.getConnectionName());
-        tabla.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        tabla.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+        history.setEditable(false);
+        selectLine = getAction(DefaultEditorKit.selectLineAction);
+        history.addMouseListener( new MouseListener(){
 
+            @Override
+            public void mouseClicked(MouseEvent e)
+            {
+                if ( SwingUtilities.isLeftMouseButton(e)  && e.getClickCount() == 1)
+                {
+                    selectLine.actionPerformed( null );
+                    texto.setText(history.getSelectedText());
+                }
+                
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent arg0)
+            {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            public void mouseExited(MouseEvent arg0)
+            {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            public void mousePressed(MouseEvent arg0)
+            {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent arg0)
+            {
+                // TODO Auto-generated method stub
+                
+            }
+            
+        });;
         ventana.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent evt) {
                 try {
@@ -146,11 +194,21 @@ public class Main {
         buttonsPanel.add(deleteButton, BorderLayout.SOUTH);
         panel.add(buttonsPanel);
 
-        scrollTree.setPreferredSize(new Dimension(240, 650));
-        scrollTable.setPreferredSize(new Dimension(640, 550));
+        scrollTree.setPreferredSize(new Dimension(220, 300));
+        scrollTable.setPreferredSize(new Dimension(500, 300));
+        JPanel panelData = new JPanel();
+        BorderLayout gridLayout = new BorderLayout();
+        panelData.setLayout(gridLayout);
+        
+        
+        JScrollPane scrollHistory = new JScrollPane(history);
+        scrollHistory.setPreferredSize(new Dimension(200, 300));
+        
+        panelData.add(scrollTree,BorderLayout.LINE_START);
+        panelData.add(scrollTable,BorderLayout.CENTER);
+        panelData.add(scrollHistory,BorderLayout.LINE_END);
+        panel2.add(panelData);
 
-        panel2.add(scrollTree);
-        panel2.add(scrollTable);
         panel3.add(label);
         panel3.add(cantidadRows);
         panel3.add(botonDelete);
@@ -159,7 +217,7 @@ public class Main {
         ventana.getContentPane().add(panel, BorderLayout.NORTH);
         ventana.getContentPane().add(panel2, BorderLayout.CENTER);
         ventana.getContentPane().add(panel3, BorderLayout.SOUTH);
-        ventana.setSize(1000, 820);
+        ventana.setSize(1000, 450);
         ventana.setVisible(true);
 
         ScreenUtil.centerScreen(ventana);
@@ -235,6 +293,11 @@ public class Main {
      * @param sql
      */
     private void refreshModel(String sql) {
+
+        
+        history.append(sql+"\n");
+//        history.setLineWrap(true);
+
         if (isQuery(sql)) {
             refreshModelExecutSQL(sql);
         }
@@ -468,4 +531,22 @@ public class Main {
         return sql.toString();
     }
 
+    private Action getAction(String name)
+    {
+        Action action = null;
+        Action[] actions = history.getActions();
+ 
+        for (int i = 0; i < actions.length; i++)
+        {
+            if (name.equals( actions[i].getValue(Action.NAME).toString() ) )
+            {
+                action = actions[i];
+                break;
+            }
+        }
+ 
+        return action;
+    }
+
+   
 }
